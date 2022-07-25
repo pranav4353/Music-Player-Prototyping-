@@ -16,9 +16,10 @@ void setup()
 }//End setup
 //
 void draw() {
-  if ( song1.isLooping() && song1.loopCount()!=-1 ) println("There are", song1.loopCount() ,"Loops left.");
+  if ( song1.isLooping() && song1.loopCount()!=-1 ) println("There are", song1.loopCount(), "Loops left.");
   if ( song1.isLooping() && song1.loopCount()==-1 ) println("Looping Infinity");
   if ( song1.isPlaying() && !song1.isLooping() ) println("Play Once");
+  println("Song position", song1.position(), "Song Length", song1.length());
 }//End draw
 //
 void keyPressed() 
@@ -36,17 +37,43 @@ void keyPressed()
     int loopNum = int(keystr);
     song1.loop(loopNum); //Parameter is Parameter is number of repeats
     //if ( key=='l' || key=='L' ) song1.loop(loopNum);
-    }//End LOOP Function
-    if (key=='i' || key=='1' ) song1.loop(); //infinite Loop, no parameter OR -1
-    if (key >= '2' || key=='0' ) println ("I do not loop that much, press i for infinite loop");
-    //
-    if ( key=='m' || key=='M' ) {//Mute Button
-    
-    }//End Mute Button
-    
-  }//End keyPressed
+  }//End LOOP Function
+  if (key=='i' || key=='1' ) song1.loop(); //infinite Loop, no parameter OR -1
+  if (key >= '2' || key=='0' ) println ("I do not loop that much, press i for infinite loop");
   //
-  void mousePressed() {
-  }//End mousePressed
+  if ( key=='m' || key=='M' ) {//Mute Button
+    if ( song1.isMuted() ) {
+      song1.unmute();
+    } else {
+      song1.mute();
+    }
+  }//End Mute Button
+  //
+  if ( key=='f' || key=='F' ) song1.skip(1000); //skip forward 1 second (1000milliseconds)
+  if ( key=='r' || key=='R' ) song1.skip(-1000); //skip backwards 1  second (1000milliseconds)
+  //
+  if ( key=='s' || key=='S' ) {//STOP Button
+    if ( song1.isPlaying() ) {
+      song1.pause();
+      song1.rewind();
+    } else {//Song is not playing
+      song1.rewind();
+    }
+  }//End STOP Button
+  //
+  if ( key=='p' || key=='P' ) {//PAUSE Button
+    if ( song1.isPlaying() ) {
+      song1.pause();
+    } else if ( song1.position() >= song1.length() - song1.length()*1/5 ) {
+      song1.rewind();
+      song1.play();
+    } else {
+      song1.play();
+    }
+  }//End PAUSE Button
+}//End keyPressed
+//
+void mousePressed() {
+}//End mousePressed
 //
 //End MAIN Program
